@@ -1,10 +1,6 @@
 package com.test.music.retrofit;
 
-import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-
-import java.io.File;
-import java.io.IOException;
 
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -26,16 +22,9 @@ public class RestClient {
     }
 
     private static void setupRestClient() {
-        Cache cache = null;
-        try {
-            cache = new Cache(new File("C://"), 1024);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(ROOT)
-                .setClient(new OkClient(new OkHttpClient().setCache(cache)))
+                .setClient(new OkClient(new OkHttpClient()))
                 .setLogLevel(RestAdapter.LogLevel.FULL);
 
         RestAdapter restAdapter = builder.build();
