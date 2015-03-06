@@ -27,7 +27,10 @@ import com.test.music.retrofit.RestClient;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener{
     public static final String ALBUMS = "albums";
@@ -95,6 +98,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         protected Void doInBackground(Void... params) {
             RestAdapter adapter = new RestAdapter.Builder()
                     .setEndpoint(RestClient.SERVER_URL)
+                    .setErrorHandler(new MyErrorHandler())
                     .build();
 
             RestClient.Api service = adapter.create(RestClient.Api.class);
@@ -102,6 +106,16 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             result.addAll(response.getArtists());
             albumList.addAll(response.getAlbums());
             return null;
+        }
+    }
+
+    public class MyErrorHandler implements ErrorHandler {
+        @Override public Throwable handleError(RetrofitError cause) {
+            Response r = cause.getResponse();
+            if (r != null && r.getStatus() == 401) {
+                return new Exception(cause);
+            }
+            return cause;
         }
     }
 
