@@ -1,7 +1,8 @@
 package com.test.music.pojo;
 
+import java.io.Serializable;
 
-public class Artist {
+public class Artist implements Serializable {
     private long id;
     private String name;
     private String description;

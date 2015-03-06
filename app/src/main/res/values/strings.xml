@@ -6,4 +6,7 @@
     <string name="action_settings">Settings</string>
 <string name="title_template_step">Step  Lorem
         Ipsum</string>
+    <color name="redColor">#f00</color>
+    <color name="blueColor">#ff3730ff</color>
+
 </resources>

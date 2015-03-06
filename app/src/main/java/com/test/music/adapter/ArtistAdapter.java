@@ -15,7 +15,7 @@ import java.util.List;
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder> {
 
     private List<Artist> artistList;
-    OnItemClickListener mItemClickListener;
+    private OnItemClickListener mItemClickListener;
 
     public ArtistAdapter(List<Artist> artistList) {
         this.artistList = artistList;
@@ -33,6 +33,8 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     public void onBindViewHolder(ArtistViewHolder artistViewHolder, int i) {
         Artist artist = artistList.get(i);
         artistViewHolder.vName.setText(artist.getName());
+        artistViewHolder.id.setText(Long.toString(artist.getId()));
+        artistViewHolder.genres.setText(artist.getGenres());
         artistViewHolder.currentArtist = artistList.get(i);
     }
 
@@ -50,25 +52,20 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
         public TextView vName;
         public TextView id;
+        public TextView genres;
         public Artist currentArtist;
 
         public ArtistViewHolder(View v) {
             super(v);
             vName =  (TextView) v.findViewById(R.id.txtName);
-            vName.setOnClickListener(this);
+            id =  (TextView) v.findViewById(R.id.txtId);
+            genres =  (TextView) v.findViewById(R.id.genres);
+            v.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             mItemClickListener.onItemClick(v, getPosition());
         }
-    }
-
-    public List<Artist> getArtistList() {
-        return artistList;
-    }
-
-    public void setArtistList(List<Artist> artistList) {
-        this.artistList = artistList;
     }
 }

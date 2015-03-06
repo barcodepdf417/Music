@@ -33,14 +33,6 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
         RecyclerViewFragment forecastFragment =  ((RecyclerViewFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.recycler_fragment));
         forecastFragment.setUseTwoPane(mTwoPane);
-
-
-//        if (savedInstanceState == null) {
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            RecyclerViewFragment fragment = new RecyclerViewFragment();
-//            transaction.add(R.id.sample_content_fragment, fragment);
-//            transaction.commit();
-//        }
     }
 
     @Override
@@ -59,13 +51,13 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
     }
 
     @Override
-    public void onUpdate(String msg) {
+    public void onUpdate(String msg, Bundle extract) {
         if (mTwoPane) {
             ArtistViewFragment fragment = new ArtistViewFragment();
             Bundle bundle = new Bundle();
             bundle.putString(ARTIST, msg);
+            bundle.putBundle("bundle",extract);
             fragment.setArguments(bundle);
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.albums_container, fragment)
                     .addToBackStack(null)
@@ -74,6 +66,7 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
             ArtistViewFragment fragment = new ArtistViewFragment();
             Bundle bundle = new Bundle();
             bundle.putString(ARTIST, msg);
+            bundle.putBundle("bundle",extract);
             fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction()

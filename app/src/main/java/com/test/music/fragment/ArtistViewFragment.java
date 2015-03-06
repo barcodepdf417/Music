@@ -8,29 +8,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.music.R;
-import com.test.music.retrofit.ArtistResponse;
-import com.test.music.retrofit.RestClient;
+import com.test.music.pojo.Album;
+import com.test.music.pojo.AlbumsHolder;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import java.util.List;
 
 public class ArtistViewFragment extends Fragment{
-    public static final String UNNAMED = "unnamed";
+    public static final String BUNDLE = "bundle";
+    private static final String ALBUMS = "albums";
     private final String ARTIST = "artist";
 
-    ViewPager viewPager;
-    MyPagerAdapter myPagerAdapter;
+    private ViewPager viewPager;
+    private MyPagerAdapter myPagerAdapter;
     private View viewRoot;
     private FragmentActivity myContext;
     private String name;
@@ -46,12 +43,17 @@ public class ArtistViewFragment extends Fragment{
         viewRoot = inflater.inflate(R.layout.pager_view, container, false);
 
         Bundle bundle = this.getArguments();
-        String name = UNNAMED;
+        AlbumsHolder holder = null;
         if(bundle != null){
-            name = bundle.getString(ARTIST, UNNAMED);
+            Bundle newBundle = bundle.getBundle(BUNDLE);
+            holder = (AlbumsHolder)newBundle.getSerializable(ALBUMS);
         }
         viewPager = (ViewPager)viewRoot.findViewById(R.id.myviewpager);
-        myPagerAdapter = new MyPagerAdapter(name);
+        if(!holder.getAlbums().isEmpty()){
+            myPagerAdapter = new MyPagerAdapter(holder.getAlbums());
+        } else {
+            myPagerAdapter = new MyPagerAdapter(new Album());
+        }
         viewPager.setAdapter(myPagerAdapter);
 
         return viewRoot;
@@ -75,16 +77,24 @@ public class ArtistViewFragment extends Fragment{
 
     private class MyPagerAdapter extends PagerAdapter {
 
-        private MyPagerAdapter(String name) {
-            this.name = name;
+        private List<Album> albumsList;
+        private Album emptyAlbum;
+        private String name;
+
+        private MyPagerAdapter(List<Album> albums) {
+            this.albumsList = albums;
         }
 
-        private String name;
-        int NumberOfPages = 5;
+        private MyPagerAdapter(Album album) {
+            this.emptyAlbum = album;
+        }
 
         @Override
         public int getCount() {
-            return NumberOfPages;
+            if(albumsList != null && albumsList.isEmpty() || albumsList == null){
+                return 1;
+            }
+            return albumsList.size();
         }
 
         @Override
@@ -95,28 +105,6 @@ public class ArtistViewFragment extends Fragment{
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-
-            RestClient.get().getJournal("data.json", new Callback<ArtistResponse>() {
-                @Override
-                public void success(ArtistResponse artistResponse, Response response) {
-                    Toast.makeText(myContext,
-                            "Base " +artistResponse.getAlbums() + " clicked " + artistResponse.getArtists() + " title ",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.i("App", error.toString());
-                }
-            });
-
-            TextView textView = new TextView(myContext);
-            textView.setTextColor(Color.WHITE);
-            textView.setTextSize(30);
-            textView.setGravity(Gravity.CENTER);
-            textView.setTypeface(Typeface.DEFAULT_BOLD);
-            textView.setText(getName() + " " + String.valueOf(position));
-
             LinearLayout layout = new LinearLayout(myContext);
             layout.setOrientation(LinearLayout.VERTICAL);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
@@ -124,19 +112,44 @@ public class ArtistViewFragment extends Fragment{
             layout.setBackgroundColor(0xFF101010);
             layout.setLayoutParams(layoutParams);
             layout.setGravity(Gravity.CENTER);
-            layout.addView(textView);
 
-//            final int page = position;
-//            layout.setOnClickListener(new View.OnClickListener(){
-//
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(myContext,
-//                            "Page " + page + " clicked",
-//                            Toast.LENGTH_LONG).show();
-//                }});
+            if(emptyAlbum != null){
+                TextView textView = new TextView(myContext);
+                textView.setTextColor(Color.WHITE);
+                textView.setTextSize(30);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTypeface(Typeface.DEFAULT_BOLD);
+                textView.setText("There are no albums for this artist");
+                layout.addView(textView);
 
+            } else {
+                TextView idView = new TextView(myContext);
+                idView.setTextColor(Color.WHITE);
+                idView.setTextSize(30);
+                idView.setGravity(Gravity.CENTER);
+                idView.setTypeface(Typeface.DEFAULT_BOLD);
+                idView.setText(Integer.toString(albumsList.get(position).getId()));
+
+                TextView titleView = new TextView(myContext);
+                titleView.setTextColor(Color.WHITE);
+                titleView.setTextSize(30);
+                titleView.setGravity(Gravity.CENTER);
+                titleView.setTypeface(Typeface.DEFAULT_BOLD);
+                titleView.setText(albumsList.get(position).getTitle() );
+
+                TextView type = new TextView(myContext);
+                type.setTextColor(Color.WHITE);
+                type.setTextSize(30);
+                type.setGravity(Gravity.CENTER);
+                type.setTypeface(Typeface.DEFAULT_BOLD);
+                type.setText(albumsList.get(position).getType() );
+
+                layout.addView(idView);
+                layout.addView(titleView);
+                layout.addView(type);
+            }
             container.addView(layout);
+
             return layout;
         }
 
@@ -151,6 +164,14 @@ public class ArtistViewFragment extends Fragment{
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public List<Album> getAlbumsList() {
+            return albumsList;
+        }
+
+        public void setAlbumsList(List<Album> albumsList) {
+            this.albumsList = albumsList;
         }
     }
 

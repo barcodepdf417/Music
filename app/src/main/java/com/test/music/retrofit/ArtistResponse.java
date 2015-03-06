@@ -6,10 +6,11 @@ import com.google.gson.annotations.SerializedName;
 import com.test.music.pojo.Album;
 import com.test.music.pojo.Artist;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistResponse {
+public class ArtistResponse implements Serializable{
     @SerializedName("artists")
     @Expose
     private List<Artist> artists = new ArrayList<Artist>();

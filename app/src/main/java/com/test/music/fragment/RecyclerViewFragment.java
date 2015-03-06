@@ -18,6 +18,8 @@ import com.test.music.R;
 import com.test.music.adapter.ArtistAdapter;
 import com.test.music.events.OnItemClickListener;
 import com.test.music.events.OnUpdateListener;
+import com.test.music.pojo.Album;
+import com.test.music.pojo.AlbumsHolder;
 import com.test.music.pojo.Artist;
 import com.test.music.retrofit.ArtistResponse;
 import com.test.music.retrofit.RestClient;
@@ -25,17 +27,17 @@ import com.test.music.retrofit.RestClient;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.RestAdapter;
 
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener{
+    public static final String ALBUMS = "albums";
 
     private FragmentActivity myContext;
-    private boolean useTwoPane;
     private RecyclerView recyclerView;
     private ArtistAdapter artistAdapter;
     private OnUpdateListener updateListener;
+    private ProgressDialog progressDialog;
+    private boolean useTwoPane;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,49 +62,45 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
     private class AsyncListLoader extends AsyncTask<Void, Void, Void> {
         List<Artist> result = new ArrayList<>() ;
+        List<Album> albumList = new ArrayList<>() ;
 
         @Override
         protected void onPostExecute(Void args) {
-
             artistAdapter = new ArtistAdapter(result);
             recyclerView.setAdapter(artistAdapter);
-
-            Log.d("RecyclerViewFragment", "RecyclerViewFragment onPostExecute" + artistAdapter.getItemCount() + "         " + artistAdapter.getArtistList().size());
-            Log.d("RecyclerViewFragment", "RecyclerViewFragment onPostExecute result" + artistAdapter.getItemCount() + "         " + result.size());
 
             artistAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    TextView textView = (TextView)view.findViewById(R.id.txtName);
-                    ((OnUpdateListener)getActivity())
-                            .onUpdate(textView.getText().toString());
+                    TextView id = (TextView) view.findViewById(R.id.txtId);
+                    Bundle bundle = new Bundle();
+                    long artistId = Long.parseLong(id.getText().toString());
+                    bundle.putSerializable(ALBUMS, new AlbumsHolder(prepareList(artistId, albumList)));
+                    ((OnUpdateListener) getActivity()).onUpdate(id.getText().toString(), bundle);
                 }
             });
+            progressDialog.dismiss();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new ProgressDialog(myContext);
+            progressDialog.setMessage("Loading...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
+            RestAdapter adapter = new RestAdapter.Builder()
+                    .setEndpoint(RestClient.SERVER_URL)
+                    .build();
 
-            for(int i = 0; i < 100; i++){
-                RestClient.get().getJournal("data.json", new Callback<ArtistResponse>() {
-                    @Override
-                    public void success(ArtistResponse artistResponse, Response response) {
-                        result.addAll(artistResponse.getArtists());
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.i("App", error.toString());
-                    }
-                });
-            }
-            Log.d("RecyclerViewFragment", "RecyclerViewFragment doInBackground result" + result.size());
-
+            RestClient.Api service = adapter.create(RestClient.Api.class);
+            ArtistResponse response = service.getData();
+            result.addAll(response.getArtists());
+            albumList.addAll(response.getAlbums());
             return null;
         }
     }
@@ -117,6 +115,16 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement onButtonPressed");
         }
+    }
+
+    private List<Album> prepareList(long id, List<Album> albums){
+        List<Album> result = new ArrayList<>();
+        for(Album album : albums){
+            if(album.getArtistId() == id){
+                result.add(album);
+            }
+        }
+        return result;
     }
 
     @Override
