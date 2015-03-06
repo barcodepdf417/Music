@@ -11,6 +11,7 @@ import com.test.music.fragment.RecyclerViewFragment;
 
 public class MainActivity extends FragmentActivity  implements OnUpdateListener{
     public final static String ARTIST = "artist";
+    public static final String BUNDLE = "bundle";
 
     public boolean mTwoPane;
 
@@ -55,8 +56,7 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
         if (mTwoPane) {
             ArtistViewFragment fragment = new ArtistViewFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(ARTIST, msg);
-            bundle.putBundle("bundle",extract);
+            bundle.putBundle(BUNDLE,extract);
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.albums_container, fragment)
@@ -66,7 +66,7 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
             ArtistViewFragment fragment = new ArtistViewFragment();
             Bundle bundle = new Bundle();
             bundle.putString(ARTIST, msg);
-            bundle.putBundle("bundle",extract);
+            bundle.putBundle(BUNDLE,extract);
             fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction()

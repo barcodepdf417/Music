@@ -24,13 +24,9 @@ import java.util.List;
 public class ArtistViewFragment extends Fragment{
     public static final String BUNDLE = "bundle";
     private static final String ALBUMS = "albums";
-    private final String ARTIST = "artist";
 
-    private ViewPager viewPager;
-    private MyPagerAdapter myPagerAdapter;
-    private View viewRoot;
-    private FragmentActivity myContext;
     private String name;
+    private FragmentActivity myContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +36,8 @@ public class ArtistViewFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        viewRoot = inflater.inflate(R.layout.pager_view, container, false);
+        MyPagerAdapter myPagerAdapter;
+        View viewRoot = inflater.inflate(R.layout.pager_view, container, false);
 
         Bundle bundle = this.getArguments();
         AlbumsHolder holder = null;
@@ -48,7 +45,7 @@ public class ArtistViewFragment extends Fragment{
             Bundle newBundle = bundle.getBundle(BUNDLE);
             holder = (AlbumsHolder)newBundle.getSerializable(ALBUMS);
         }
-        viewPager = (ViewPager)viewRoot.findViewById(R.id.myviewpager);
+        ViewPager viewPager = (ViewPager) viewRoot.findViewById(R.id.myviewpager);
         if(!holder.getAlbums().isEmpty()){
             myPagerAdapter = new MyPagerAdapter(holder.getAlbums());
         } else {
@@ -77,9 +74,9 @@ public class ArtistViewFragment extends Fragment{
 
     private class MyPagerAdapter extends PagerAdapter {
 
+        private String name;
         private List<Album> albumsList;
         private Album emptyAlbum;
-        private String name;
 
         private MyPagerAdapter(List<Album> albums) {
             this.albumsList = albums;
@@ -181,9 +178,5 @@ public class ArtistViewFragment extends Fragment{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void update(String msg){
-        setName(msg);
     }
 }
