@@ -130,16 +130,18 @@ public class ArtistViewFragment extends Fragment{
                 TextView titleView = new TextView(myContext);
                 titleView.setTextColor(Color.WHITE);
                 titleView.setTextSize(30);
+                titleView.setTextColor(Color.RED);
                 titleView.setGravity(Gravity.CENTER);
                 titleView.setTypeface(Typeface.DEFAULT_BOLD);
-                titleView.setText(albumsList.get(position).getTitle() );
+                titleView.setText(albumsList.get(position).getTitle());
 
                 TextView type = new TextView(myContext);
                 type.setTextColor(Color.WHITE);
                 type.setTextSize(30);
+                type.setTextColor(Color.BLUE);
                 type.setGravity(Gravity.CENTER);
                 type.setTypeface(Typeface.DEFAULT_BOLD);
-                type.setText(albumsList.get(position).getType() );
+                type.setText(albumsList.get(position).getType());
 
                 layout.addView(idView);
                 layout.addView(titleView);
