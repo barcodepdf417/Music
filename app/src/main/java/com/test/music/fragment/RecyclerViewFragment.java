@@ -23,18 +23,15 @@ import com.test.music.pojo.AlbumsHolder;
 import com.test.music.pojo.Artist;
 import com.test.music.retrofit.ArtistResponse;
 import com.test.music.retrofit.RestClient;
+import com.test.music.retrofit.RestService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.ErrorHandler;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener{
     public static final String ALBUMS = "albums";
 
+    private static RestClient.Api serviceWrapper;
     private FragmentActivity myContext;
     private RecyclerView recyclerView;
     private ArtistAdapter artistAdapter;
@@ -62,6 +59,18 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
         return rootView;
     }
+
+    public RestClient.Api getServiceWrapper() {
+        if (serviceWrapper == null) {
+            RecyclerViewFragment.setServiceWrapper(new RestService().getService());
+        }
+        return serviceWrapper;
+    }
+
+    public static void setServiceWrapper(RestClient.Api serviceWrapper) {
+        RecyclerViewFragment.serviceWrapper = serviceWrapper;
+    }
+
 
     private class AsyncListLoader extends AsyncTask<Void, Void, Void> {
         List<Artist> result = new ArrayList<>() ;
@@ -96,27 +105,15 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            RestAdapter adapter = new RestAdapter.Builder()
-                    .setEndpoint(RestClient.SERVER_URL)
-                    .setErrorHandler(new MyErrorHandler())
-                    .build();
-
-            RestClient.Api service = adapter.create(RestClient.Api.class);
-            ArtistResponse response = service.getData();
+            ArtistResponse response = getService().getData();
             result.addAll(response.getArtists());
             albumList.addAll(response.getAlbums());
             return null;
         }
     }
 
-    public class MyErrorHandler implements ErrorHandler {
-        @Override public Throwable handleError(RetrofitError cause) {
-            Response r = cause.getResponse();
-            if (r != null && r.getStatus() == 401) {
-                return new Exception(cause);
-            }
-            return cause;
-        }
+    public RestClient.Api getService(){
+        return new RestService().getService();
     }
 
     @Override
