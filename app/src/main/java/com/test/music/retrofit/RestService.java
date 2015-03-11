@@ -1,7 +1,7 @@
 package com.test.music.retrofit;
 
-import com.test.music.MainActivity;
-import com.test.music.MyErrorHandler;
+import com.test.music.activity.MainActivity;
+import com.test.music.exception.MyErrorHandler;
 
 import javax.inject.Named;
 

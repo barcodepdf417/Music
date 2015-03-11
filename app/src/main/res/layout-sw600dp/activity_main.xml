@@ -7,6 +7,12 @@
     android:orientation="horizontal"
     android:id="@+id/sample_main_layout">
 
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/makePhoto"
+        android:onClick="createPhoto" />
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/recycler_fragment"

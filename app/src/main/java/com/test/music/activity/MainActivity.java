@@ -1,10 +1,13 @@
-package com.test.music;
+package com.test.music.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.test.music.R;
 import com.test.music.events.OnUpdateListener;
 import com.test.music.fragment.ArtistViewFragment;
 import com.test.music.fragment.RecyclerViewFragment;
@@ -75,5 +78,10 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
                     .commit();
         }
 
+    }
+
+    public void createPhoto(View view) {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
     }
 }

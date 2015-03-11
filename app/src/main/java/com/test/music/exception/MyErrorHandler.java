@@ -1,4 +1,4 @@
-package com.test.music;
+package com.test.music.exception;
 
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;

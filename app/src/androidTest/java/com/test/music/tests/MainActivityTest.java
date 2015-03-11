@@ -3,14 +3,13 @@ package com.test.music.tests;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.robotium.solo.Solo;
-import com.test.music.MainActivity;
+import com.test.music.activity.MainActivity;
 
-public class SimpleActivityTest extends
-        ActivityInstrumentationTestCase2<MainActivity> {
+public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private Solo solo;
 
-    public SimpleActivityTest() {
+    public MainActivityTest() {
         super(MainActivity.class);
     }
 

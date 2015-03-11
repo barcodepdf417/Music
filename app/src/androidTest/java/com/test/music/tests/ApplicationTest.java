@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.test.music.MainActivity;
-import com.test.music.MyErrorHandler;
+import com.test.music.activity.MainActivity;
+import com.test.music.exception.MyErrorHandler;
 import com.test.music.R;
 import com.test.music.fragment.RecyclerViewFragment;
 import com.test.music.pojo.Album;
@@ -16,20 +16,12 @@ import com.test.music.retrofit.RestClient;
 
 import retrofit.RestAdapter;
 
-/**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
- */
 public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private MainActivity mFirstTestActivity;
-    private RecyclerViewFragment recyclerViewFragment;
     private RestClient.Api api;
 
     public ApplicationTest() {
         super(MainActivity.class);
-    }
-
-    public ApplicationTest(Class<MainActivity> activityClass) {
-        super(activityClass);
     }
 
     @Override
@@ -41,11 +33,7 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
     public void setUp() throws Exception {
         super.setUp();
         setActivityInitialTouchMode(true);
-        recyclerViewFragment = new RecyclerViewFragment();
         mFirstTestActivity = getActivity();
-//        getActivity().addFragment(recyclerViewFragment, RecyclerViewFragment.class.getSimpleName());
-
-//        recyclerView = (RecyclerView) mFirstTestActivity.findViewById(R.id.cardList);
     }
 
     public void testJson() {
@@ -101,15 +89,4 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         Fragment frag = mFirstTestActivity.getSupportFragmentManager().findFragmentByTag("tag");
         return frag;
     }
-
-
-
-//    public void testPreconditions() {
-//        artistAdapter = new ArtistAdapter(getArtists());
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(artistAdapter);
-//        assertNotNull("mFirstTestActivity is null", mFirstTestActivity);
-//    }
 }
