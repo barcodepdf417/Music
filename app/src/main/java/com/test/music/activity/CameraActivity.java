@@ -27,6 +27,7 @@ import java.io.IOException;
 
 public class CameraActivity extends Activity {
     private static final String TAG = "CamTestActivity";
+    boolean timerIsStarted = false;
     Preview preview;
     Camera camera;
 
@@ -42,13 +43,18 @@ public class CameraActivity extends Activity {
         final Button button = (Button) findViewById(R.id.buttonId);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                takePicture();
+                if(!timerIsStarted){
+                    takePicture();
+                } else {
+                    Toast.makeText(getBaseContext(), "Timer is already started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         takePicture();
     }
 
     private void takePicture() {
+        timerIsStarted = true;
         Toast.makeText(getBaseContext(), "Photo will be created in 5 sec", Toast.LENGTH_SHORT).show();
 
         new CountDownTimer(5000, 1000) {
@@ -59,7 +65,8 @@ public class CameraActivity extends Activity {
             public void onFinish() {
                 if(preview.isFocused()){
                     camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-                    Toast.makeText(getBaseContext(), "Photo created", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Photo created", Toast.LENGTH_SHORT).show();
+                    timerIsStarted = false;
                 }
             }
         }.start();
