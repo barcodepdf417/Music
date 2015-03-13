@@ -13,7 +13,7 @@ import com.test.music.fragment.ArtistViewFragment;
 import com.test.music.fragment.RecyclerViewFragment;
 
 public class MainActivity extends FragmentActivity  implements OnUpdateListener{
-    public final static String ARTIST = "artist";
+    public static final String ARTIST = "artist";
     public static final String BUNDLE = "bundle";
 
     public boolean mTwoPane;

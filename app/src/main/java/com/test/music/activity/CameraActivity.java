@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import com.test.music.R;
 
 import java.io.File;
@@ -26,7 +25,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CameraActivity extends Activity {
-    private static final String TAG = "CamTestActivity";
+    public static final String TAG = "CamTestActivity";
+    public static final String BUNDLE = "bundle";
+    public static final String URI = "Uri";
     boolean timerIsStarted = false;
     Preview preview;
     Camera camera;
@@ -128,6 +129,27 @@ public class CameraActivity extends Activity {
             Log.d(TAG, "onPictureTaken - jpeg");
         }
     };
+
+    public void preview(View view) {
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+
+            Intent i = new Intent(this, PhotoActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(URI, data.getData());
+            i.putExtra(BUNDLE, bundle);
+            startActivity(i);
+        }
+    }
 
     private class SaveImageTask extends AsyncTask<byte[], Void, Void> {
 

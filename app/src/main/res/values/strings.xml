@@ -7,7 +7,9 @@
     <string name="title_template_step">Step  Lorem Ipsum</string>
     <string name="makePhoto">Create photo</string>
     <string name="try_again">Try again</string>
+    <string name="photo_preview">Preview photo</string>
     <color name="redColor">#f00</color>
     <color name="blueColor">#ff3730ff</color>
+    <color name="blackColor">#ff000000</color>
 
 </resources>

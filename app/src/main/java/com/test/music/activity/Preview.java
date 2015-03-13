@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 class Preview extends ViewGroup implements SurfaceHolder.Callback {
-    private final String TAG = "Preview";
+    public static final String TAG = "Preview";
 
     SurfaceView mSurfaceView;
     SurfaceHolder mHolder;
@@ -47,7 +47,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
             List<String> focusModes = params.getSupportedFocusModes();
             if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
                 // set the focus mode
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                 // set Camera parameters
                 mCamera.setParameters(params);
             }

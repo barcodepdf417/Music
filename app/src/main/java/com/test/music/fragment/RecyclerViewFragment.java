@@ -30,8 +30,8 @@ import java.util.List;
 
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener{
     public static final String ALBUMS = "albums";
+    public static RestClient.Api serviceWrapper;
 
-    private static RestClient.Api serviceWrapper;
     private FragmentActivity myContext;
     private RecyclerView recyclerView;
     private ArtistAdapter artistAdapter;
