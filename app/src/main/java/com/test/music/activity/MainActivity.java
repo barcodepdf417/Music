@@ -9,14 +9,15 @@ import android.view.View;
 
 import com.test.music.R;
 import com.test.music.events.OnUpdateListener;
-import com.test.music.fragment.ArtistViewFragment;
-import com.test.music.fragment.RecyclerViewFragment;
+import com.test.music.fragment.AlbumsFragment;
+import com.test.music.fragment.ArtistsFragment;
 
 public class MainActivity extends FragmentActivity  implements OnUpdateListener{
     public static final String ARTIST = "artist";
     public static final String BUNDLE = "bundle";
 
     public boolean mTwoPane;
+    private ArtistsFragment forecastFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +28,14 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
             mTwoPane = true;
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.albums_container, new ArtistViewFragment())
+                        .replace(R.id.albums_container, new AlbumsFragment())
                         .commit();
             }
         } else {
             mTwoPane = false;
         }
 
-        RecyclerViewFragment forecastFragment =  ((RecyclerViewFragment)getSupportFragmentManager()
+        forecastFragment =  ((ArtistsFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.recycler_fragment));
         forecastFragment.setUseTwoPane(mTwoPane);
     }
@@ -57,7 +58,7 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
     @Override
     public void onUpdate(String msg, Bundle extract) {
         if (mTwoPane) {
-            ArtistViewFragment fragment = new ArtistViewFragment();
+            AlbumsFragment fragment = new AlbumsFragment();
             Bundle bundle = new Bundle();
             bundle.putBundle(BUNDLE,extract);
             fragment.setArguments(bundle);
@@ -66,14 +67,14 @@ public class MainActivity extends FragmentActivity  implements OnUpdateListener{
                     .addToBackStack(null)
                     .commit();
         } else {
-            ArtistViewFragment fragment = new ArtistViewFragment();
+            AlbumsFragment fragment = new AlbumsFragment();
             Bundle bundle = new Bundle();
             bundle.putString(ARTIST, msg);
             bundle.putBundle(BUNDLE,extract);
             fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
+                    .replace(R.id.recycler_fragment, fragment)
                     .addToBackStack(null)
                     .commit();
         }

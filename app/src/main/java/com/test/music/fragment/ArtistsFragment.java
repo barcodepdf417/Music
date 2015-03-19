@@ -18,17 +18,21 @@ import com.test.music.R;
 import com.test.music.adapter.ArtistAdapter;
 import com.test.music.events.OnItemClickListener;
 import com.test.music.events.OnUpdateListener;
+import com.test.music.exception.MyErrorHandler;
 import com.test.music.pojo.Album;
 import com.test.music.pojo.AlbumsHolder;
 import com.test.music.pojo.Artist;
 import com.test.music.retrofit.ArtistResponse;
+import com.test.music.retrofit.LocalJsonClient;
 import com.test.music.retrofit.RestClient;
 import com.test.music.retrofit.RestService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewFragment extends Fragment implements View.OnClickListener{
+import retrofit.RestAdapter;
+
+public class ArtistsFragment extends Fragment implements View.OnClickListener{
     public static final String ALBUMS = "albums";
     public static RestClient.Api serviceWrapper;
 
@@ -62,19 +66,19 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
     public RestClient.Api getServiceWrapper() {
         if (serviceWrapper == null) {
-            RecyclerViewFragment.setServiceWrapper(new RestService().getService());
+            ArtistsFragment.setServiceWrapper(new RestService().getService());
         }
         return serviceWrapper;
     }
 
     public static void setServiceWrapper(RestClient.Api serviceWrapper) {
-        RecyclerViewFragment.serviceWrapper = serviceWrapper;
+        ArtistsFragment.serviceWrapper = serviceWrapper;
     }
 
 
     private class AsyncListLoader extends AsyncTask<Void, Void, Void> {
-        List<Artist> result = new ArrayList<>() ;
-        List<Album> albumList = new ArrayList<>() ;
+        List<Artist> result = new ArrayList<Artist>() ;
+        List<Album> albumList = new ArrayList<Album>() ;
 
         @Override
         protected void onPostExecute(Void args) {
@@ -105,10 +109,32 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            ArtistResponse response = getService().getData();
+            ArtistResponse response;
+            try {
+                response = getService().getData();
+            } catch (RuntimeException ex){
+                response = getResonse();
+            }
             result.addAll(response.getArtists());
             albumList.addAll(response.getAlbums());
             return null;
+        }
+
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            ArtistResponse response = getService().getData();
+//            result.addAll(response.getArtists());
+//            albumList.addAll(response.getAlbums());
+//            return null;
+//        }
+
+        private ArtistResponse getResonse(){
+            RestAdapter adapter = new RestAdapter.Builder()
+                    .setEndpoint("sample.com")
+                    .setClient(new LocalJsonClient())
+                    .setErrorHandler(new MyErrorHandler())
+                    .build();
+            return adapter.create(RestClient.Api.class).getData();
         }
     }
 
@@ -129,7 +155,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     }
 
     private List<Album> prepareList(long id, List<Album> albums){
-        List<Album> result = new ArrayList<>();
+        List<Album> result = new ArrayList<Album>();
         for(Album album : albums){
             if(album.getArtistId() == id){
                 result.add(album);

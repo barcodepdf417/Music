@@ -4,6 +4,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.robotium.solo.Solo;
 import com.test.music.activity.MainActivity;
+import org.junit.Test;
 
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -22,6 +23,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.finishOpenedActivities();
     }
 
+    @Test
     public void testExercise01() throws Exception {
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.clickOnText("1");

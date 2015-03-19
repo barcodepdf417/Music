@@ -67,8 +67,8 @@ public class CameraActivity extends Activity {
                 if(preview.isFocused()){
                     camera.takePicture(shutterCallback, rawCallback, jpegCallback);
                     Toast.makeText(getBaseContext(), "Photo created", Toast.LENGTH_SHORT).show();
-                    timerIsStarted = false;
                 }
+                timerIsStarted = false;
             }
         }.start();
     }

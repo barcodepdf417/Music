@@ -16,12 +16,12 @@
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/recycler_fragment"
-        android:name="com.test.music.fragment.RecyclerViewFragment"
+        android:name="com.test.music.fragment.ArtistsFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="center"
-        tools:context="com.test.music.fragment.RecyclerViewFragment"/>
+        tools:context="com.test.music.fragment.ArtistsFragment"/>
 
     <FrameLayout
         android:id="@+id/albums_container"

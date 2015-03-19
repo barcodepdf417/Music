@@ -7,13 +7,13 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.test.music.activity.MainActivity;
 import com.test.music.exception.MyErrorHandler;
 import com.test.music.R;
-import com.test.music.fragment.RecyclerViewFragment;
+import com.test.music.fragment.ArtistsFragment;
 import com.test.music.pojo.Album;
 import com.test.music.pojo.Artist;
 import com.test.music.retrofit.ArtistResponse;
 import com.test.music.retrofit.LocalJsonClient;
 import com.test.music.retrofit.RestClient;
-
+import org.junit.Test;
 import retrofit.RestAdapter;
 
 public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -36,6 +36,7 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         mFirstTestActivity = getActivity();
     }
 
+    @Test
     public void testJson() {
         ArtistResponse response = getResonse();
         Artist artist = getArtistMock();
@@ -49,8 +50,9 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         assertEquals(response.getAlbums().get(0).getType(), album.getType());
     }
 
+    @Test
     public void testFragment() {
-        RecyclerViewFragment fragment = new RecyclerViewFragment();
+        ArtistsFragment fragment = new ArtistsFragment();
         startFragment(fragment);
         assertNotNull("RecyclerViewFragment is null", fragment);
     }

@@ -10,16 +10,17 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:text="@string/makePhoto"
+        android:id="@+id/makePhoto"
         android:onClick="createPhoto" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/recycler_fragment"
-        android:name="com.test.music.fragment.RecyclerViewFragment"
+        android:name="com.test.music.fragment.ArtistsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        tools:context="com.test.music.fragment.RecyclerViewFragment"
+        tools:context="com.test.music.fragment.ArtistsFragment"
         tools:layout="@android:layout/list_content" />
 
 </LinearLayout>
