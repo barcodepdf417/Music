@@ -4,23 +4,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.test.music.R;
 import com.test.music.activity.CameraActivity;
 import com.test.music.activity.MainActivity;
-import com.test.music.adapter.ArtistAdapter;
 import com.test.music.fragment.AlbumsFragment;
-import com.test.music.fragment.ArtistsFragment;
 import com.test.music.pojo.Album;
 import com.test.music.pojo.AlbumsHolder;
-import com.test.music.pojo.Artist;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -103,7 +95,7 @@ public class MainActivityTest {
 
     @Test
     public void testSimpleAsynkTask() throws Exception {
-        AsyncTask<String, String, String> asyncTask = new MyAsyncTask();
+        AsyncTask<String, String, String> asyncTask = new TestAsyncTask();
 
         asyncTask.execute("a", "b");
         transcript.assertEventsSoFar("onPreExecute");
@@ -116,7 +108,7 @@ public class MainActivityTest {
         transcript.assertEventsSoFar("onPostExecute c");
     }
 
-    private class MyAsyncTask extends AsyncTask<String, String, String> {
+    private class TestAsyncTask extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             transcript.add("onPreExecute");
